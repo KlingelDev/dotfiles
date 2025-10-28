@@ -1,0 +1,19 @@
+# Conveyor unit tests
+new_tab conveyor.tests
+cd ~/dev/Conveyor/
+launch scripts/autotest.sh
+
+# Uwsgi
+new_tab conveyor.uwsgi
+cd ~/dev/Conveyor/
+launch ./conveyor -u
+
+# Conveyor Server
+new_tab conveyor.server
+cd ~/dev/Conveyor/
+launch ./conveyor -s
+
+# Npm dev server
+new_tab conveyor.npm.dev
+cd ~/dev/Conveyor/
+launch conveyor -g

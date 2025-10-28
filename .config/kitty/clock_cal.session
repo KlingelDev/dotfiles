@@ -1,0 +1,2 @@
+launch tclock clock --no-seconds
+launch --location=hsplit --bias=80 calcurse

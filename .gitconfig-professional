@@ -1,0 +1,9 @@
+[user]
+  email = karl.ruskowski@optris.de
+  name = Karl Ruskowski
+  signingKey = 020EEF2DADD14F7D6D643E5970540795A15C714A
+[core]
+  editor = nvim
+  pager = less -FRX
+[commit]
+  gpgsign = true

@@ -1,0 +1,9 @@
+[user]
+  email = khruskowski@gmail.com
+  name = Karl Ruskowski
+  signingKey = FB8DA3BF
+[core]
+  editor = nvim
+  pager = less -FRX
+[commit]
+  gpgsign = true
