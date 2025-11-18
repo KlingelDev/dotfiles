@@ -197,25 +197,35 @@ vim.api.nvim_set_keymap( "i", "<C-l>", "g:coc_snippet_prev", {})
 
 -- Resession
 local resession = require("resession")
-resession.setup()
--- Resession does NOTHING automagically, so we have to set up some keymaps
-vim.keymap.set("n", "<leader>ss", resession.save)
-vim.keymap.set("n", "<leader>sl", resession.load)
-vim.keymap.set("n", "<leader>sd", resession.delete)
-
-vim.api.nvim_create_autocmd("VimLeavePre", {
-  callback = function()
-    -- Always save a special session named "last"
-    resession.save("last")
-  end,
-})
-
-require("resession").setup({
+resession.setup({
   autosave = {
     enabled = true,
     interval = 60,
     notify = true,
   },
 })
--- Misc
+vim.api.nvim_create_user_command("LoadSession", function(opts)
+  require("resession").load(opts.args)
+end, {
+  nargs = 1,
+  complete = function(ArgLead, CmdLine, CursorPos)
+    return require("resession").list()
+  end
+})
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  callback = function()
+    -- Always save a special session named "last"
+    resession.save("last")
+    resession.save("base")
+  end,
+})
 
+-- local resession = require("resession")
+-- resession.setup()
+
+-- Resession does NOTHING automagically, so we have to set up some keymaps
+vim.keymap.set("n", "<leader>ss", resession.save)
+vim.keymap.set("n", "<leader>sl", resession.load)
+vim.keymap.set("n", "<leader>sd", resession.delete)
+
+-- Misc

@@ -1,2 +1,5 @@
 launch tclock clock --no-seconds
-launch --location=hsplit --bias=80 calcurse
+launch --location=hsplit --bias=80 zsh
+new_tab
+new_tab
+new_tab

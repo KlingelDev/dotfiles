@@ -1,5 +1,5 @@
-new_tab
-launch zsh
+new_tab otc.server cmake
+launch nvim -c "cd /home/karl/dev/otc/OTC.SDK.Server/ | LoadSession otcserver"
 new_tab
 launch zsh
 new_tab
