@@ -204,6 +204,7 @@ resession.setup({
     notify = true,
   },
 })
+
 vim.api.nvim_create_user_command("LoadSession", function(opts)
   require("resession").load(opts.args)
 end, {
@@ -212,6 +213,16 @@ end, {
     return require("resession").list()
   end
 })
+
+vim.api.nvim_create_user_command("SaveSession", function(opts)
+  require("resession").save(opts.args)
+end, {
+  nargs = 1,
+  complete = function(ArgLead, CmdLine, CursorPos)
+    return require("resession").list()
+  end
+})
+
 vim.api.nvim_create_autocmd("VimLeavePre", {
   callback = function()
     -- Always save a special session named "last"
