@@ -47,3 +47,9 @@ export EDITOR='nvim'
 alias vim="/usr/bin/nvim"
 alias ll="ls -lha"
 alias l="ls -lh"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/karl/google-cloud-sdk/path.zsh.inc' ]; then . '/home/karl/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/karl/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/karl/google-cloud-sdk/completion.zsh.inc'; fi

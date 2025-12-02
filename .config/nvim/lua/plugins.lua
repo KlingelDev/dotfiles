@@ -29,14 +29,8 @@ return require('packer').startup(function(use)
   use {
     'numToStr/Comment.nvim',
     config = function()
-        require('Comment').setup({
-    autosave = {
-      enabled = true,
-      interval = 60,
-      notify = true,
-    },
-  })
-    end
+        require('Comment').setup()
+    end,
   }
 
   use {
@@ -45,13 +39,6 @@ return require('packer').startup(function(use)
   }
 
   use {'SidOfc/carbon.nvim'}
-
-  use({
-    "stevearc/resession.nvim",
-    config = function()
-      require("resession").setup()
-    end,
-  })
 
   use {
     's1n7ax/nvim-window-picker',

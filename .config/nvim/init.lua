@@ -195,7 +195,7 @@ vim.api.nvim_set_keymap( "n", "tt", ":tabnew<CR>", { silent = true })
 vim.api.nvim_set_keymap( "i", "<C-h>", "<Plug>(coc-snippets-select)", {})
 vim.api.nvim_set_keymap( "i", "<C-l>", "g:coc_snippet_prev", {})
 
--- Resession
+-- Misc
 local resession = require("resession")
 resession.setup({
   autosave = {
@@ -205,38 +205,41 @@ resession.setup({
   },
 })
 
+-- User commands
 vim.api.nvim_create_user_command("LoadSession", function(opts)
-  require("resession").load(opts.args)
+  resession.load(opts.args)
 end, {
   nargs = 1,
   complete = function(ArgLead, CmdLine, CursorPos)
-    return require("resession").list()
+    return resession.list()
   end
 })
 
 vim.api.nvim_create_user_command("SaveSession", function(opts)
-  require("resession").save(opts.args)
+  resession.save(opts.args)
 end, {
   nargs = 1,
   complete = function(ArgLead, CmdLine, CursorPos)
-    return require("resession").list()
+    return resession.list()
   end
 })
 
+-- Autosave 'last' and 'base' sessions on exit
 vim.api.nvim_create_autocmd("VimLeavePre", {
   callback = function()
-    -- Always save a special session named "last"
     resession.save("last")
     resession.save("base")
   end,
 })
 
--- local resession = require("resession")
--- resession.setup()
-
--- Resession does NOTHING automagically, so we have to set up some keymaps
+-- Keymaps
 vim.keymap.set("n", "<leader>ss", resession.save)
 vim.keymap.set("n", "<leader>sl", resession.load)
 vim.keymap.set("n", "<leader>sd", resession.delete)
 
--- Misc
+local uv = vim.loop
+local resession = require("resession")
+local timer = uv.new_timer()
+timer:start(30000, 30000, vim.schedule_wrap(function()
+  resession.save_all({ notify = true })
+end))
