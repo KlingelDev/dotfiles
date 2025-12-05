@@ -21,7 +21,12 @@ return require('packer').startup(function(use)
   use {
     'kdheepak/tabline.nvim',
     config = function()
-        require'tabline'.setup {enable = false}
+      require'tabline'.setup {
+          -- The tabline_formatter function gets tab info
+        tabline_formatter = function(tab)
+          return (tab.name and tab.name ~= "") and tab.name or "Tab " .. tab.number
+        end
+      }
     end,
     requires = {'hoob3rt/lualine.nvim', 'kyazdani42/nvim-web-devicons'}
   }

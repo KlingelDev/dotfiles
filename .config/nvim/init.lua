@@ -195,9 +195,46 @@ vim.api.nvim_set_keymap( "n", "tt", ":tabnew<CR>", { silent = true })
 vim.api.nvim_set_keymap( "i", "<C-h>", "<Plug>(coc-snippets-select)", {})
 vim.api.nvim_set_keymap( "i", "<C-l>", "g:coc_snippet_prev", {})
 
+-- Tabline tabname session save extention
+local tab_names = {} -- Your custom mapping logic here
+
+local tabline = require("tabline")
+
+local function get_tab_names()
+  local tab_data = tabline.tabline_tabs()   -- list of tab tables
+  local tab_names = {}
+  for _, tab in ipairs(tab_data) do
+    if tab.name and tab.name ~= "" then
+      tab_names[tab.number] = tab.name
+    end
+  end
+  return tab_names
+end
+
+local tabname_extension = {
+  on_save = function()
+    local names = get_tab_names()
+    print("Saving Tab Names: " .. vim.inspect(names))
+    return names
+  end,
+
+  on_pre_load = function(tab_names)
+    if tab_names then
+      for tabnr, name in pairs(tab_names) do
+        tabline.tab_rename(tabnr, name)
+      end
+      vim.cmd('redrawtabline')
+      print("Restored Tab Names: " .. vim.inspect(tab_names))
+    end
+  end,
+}
+
 -- Misc
 local resession = require("resession")
 resession.setup({
+  extensions = {
+    my_tabline = my_extension
+  },
   autosave = {
     enabled = true,
     interval = 60,
