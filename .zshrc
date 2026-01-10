@@ -48,7 +48,7 @@ export GTK_THEME=Breeze:dark
 export QT_QPA_PLATFORMTHEME="qt5ct"
 export XCURSOR_SIZE=23
 
-export PATH=$PATH:/usr/bin:~/.cargo/bin:~/.npm-global/bin
+export PATH=$PATH:/usr/bin:~/.cargo/bin:~/.npm-global/bin:~/.local/bin
 
 bindkey '^[OA' up-line-or-history
 bindkey '^[OB' down-line-or-history
