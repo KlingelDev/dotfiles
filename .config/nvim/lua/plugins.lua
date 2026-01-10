@@ -18,26 +18,14 @@ return require('packer').startup(function(use)
      requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
   }
 
-  use {
-    'kdheepak/tabline.nvim',
-    config = function()
-      require'tabline'.setup {
-          -- The tabline_formatter function gets tab info
-        tabline_formatter = function(tab)
-          return (tab.name and tab.name ~= "") and tab.name or "Tab " .. tab.number
-        end
-      }
-    end,
-    requires = {'hoob3rt/lualine.nvim', 'kyazdani42/nvim-web-devicons'}
-  }
+  use { "stevearc/resession.nvim" }
 
   use {
     'numToStr/Comment.nvim',
     config = function()
         require('Comment').setup()
-    end,
+    end
   }
-
   use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate'
@@ -54,11 +42,6 @@ return require('packer').startup(function(use)
   }
 
   use {
-      'jedrzejboczar/possession.nvim',
-      requires = { 'nvim-lua/plenary.nvim' },
-  }
-
-  use {
     "folke/todo-comments.nvim",
     requires = { "nvim-lua/plenary.nvim" },
     opts = {
@@ -68,10 +51,5 @@ return require('packer').startup(function(use)
     }
   }
 
-  use({
-  "stevearc/aerial.nvim",
-  config = function()
-    require("aerial").setup()
-  end,
-  })
+
 end)

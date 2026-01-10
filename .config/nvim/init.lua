@@ -10,9 +10,8 @@ require('pluginconf')
 
 -- Paq
 require "paq" {
-  'savq/paq-nvim', -- Let Paq manage itself
-  'rktjmp/lush.nvim',
-  'stevearc/resession.nvim',
+  "savq/paq-nvim",
+  'rktjmp/lush.nvim'
 }
 
 -- Vim plugs
@@ -24,11 +23,8 @@ Plug('ms-jpq/coq_nvim')
 Plug 'ms-jpq/coq.thirdparty'
 Plug 'ms-jpq/coq.artifacts'
 Plug 'dhruvasagar/vim-table-mode'
--- Plug 'jamessan/vim-gnupg'
--- Plug('rust-lang/rust')
-Plug('KlingelDev/psychotropic.nvim')
--- Plug('tikhomirov/vim-glsl')
 Plug('sheerun/vim-polyglot')
+Plug('KlingelDev/psychotropic.nvim')
 
 vim.call('plug#end')
 
@@ -44,7 +40,33 @@ vim.g.python_highlight_builtins = true
 
 vim.opt.undolevels = 5000
 
+-- Psychotropic Configuration
+require("psychotropic").setup({
+  style = "professional",
+  transparent = false,
+  terminal_colors = true,
+  styles = {
+    comments = { italic = true },
+    keywords = { italic = true, bold = true },
+    functions = {},
+    variables = {},
+    sidebars = "dark",
+    floats = "dark",
+  },
+})
+
 vim.cmd("colorscheme psychotropic")
+
+-- Custom Tabline Highlights
+local palette = require("psychotropic.colors.palette").colors
+vim.api.nvim_set_hl(0, "TabLineFill", { bg = palette.grey18, fg = palette.grey62 })
+vim.api.nvim_set_hl(0, "TabLine", { bg = palette.grey18, fg = palette.grey62 })
+vim.api.nvim_set_hl(0, "TabLineSel", { bg = palette.lightblue, fg = palette.black, bold = true })
+-- Powerline Separators
+vim.api.nvim_set_hl(0, "TabLineSelSep", { fg = palette.lightblue, bg = palette.grey18 })
+vim.api.nvim_set_hl(0, "TabLineSepSel", { fg = palette.grey18, bg = palette.lightblue })
+vim.api.nvim_set_hl(0, "TabLineSep", { fg = palette.grey62, bg = palette.grey18 })
+
 vim.opt.showtabline = 2
 
 vim.opt.mouse = "nv"
@@ -63,6 +85,7 @@ vim.opt.sts = 2
 vim.opt.shiftwidth = 2
 vim.opt.sw = 2
 vim.opt.tabstop = 2
+vim.opt.ts = 2
 vim.opt.list = true
 vim.opt.cindent = true
 
@@ -71,6 +94,7 @@ vim.bo.expandtab = true
 vim.bo.cindent = true
 vim.bo.sts = 2
 vim.bo.tabstop = 2
+vim.bo.ts = 2
 vim.bo.shiftwidth = 2
 vim.bo.sw = 2
 
@@ -79,8 +103,6 @@ vim.api.nvim_create_autocmd({"BufWrite", "BufRead"}, {
   pattern = { "*.py" },
   callback = function()
     vim.cmd("syntax match Optris \"\\soptris\"")
-    vim.cmd("syntax match Optris \"\\sotc\"")
-    vim.cmd("syntax match Optris \"\\sotcsdk\"")
     vim.cmd("syntax match pythonCase \"\\scase\"")
     vim.cmd("syntax match pythonmatch \"\\smatch\"")
     vim.cmd("set indentkeys-=:")
@@ -109,7 +131,10 @@ vim.opt.tw = 80
 vim.opt.colorcolumn = "80,100,110"
 vim.opt.cc = "80,100,110"
 vim.opt.ttyfast = true
+
 vim.opt.indentkeys = "0{,0},0),0],0#,!^F,o,O,e"
+vim.cmd("set indentkeys-=:")
+vim.cmd("set indentkeys-=<:>")
 
 -- no swap or backupfiles
 vim.opt.backup = false
@@ -147,6 +172,98 @@ vim.api.nvim_create_user_command('SubTabs',
 
 vim.api.nvim_create_user_command('SubNightmares',
  string.format([[:1,$ s!\([A-Za-z0-9:"&*]\)\s\{2,\}!\1 !g|norm!``]]), {})
+
+
+-- Command to rename the current tab
+vim.api.nvim_create_user_command('TabRename', function(opts)
+  local name = opts.args
+  vim.t.tab_title = name
+  vim.cmd('redrawtabline')
+end, { nargs = 1 })
+
+-- Session Management (Resession)
+vim.api.nvim_create_user_command('SessionSave', function(opts)
+  require('resession').save(opts.args)
+  vim.notify("Session " .. opts.args .. " saved", vim.log.levels.INFO)
+end, { nargs = 1 })
+
+vim.api.nvim_create_user_command('SessionLoad', function(opts)
+  require('resession').load(opts.args)
+end, { nargs = 1 })
+
+vim.api.nvim_create_user_command('SessionDelete', function(opts)
+  require('resession').delete(opts.args)
+end, { nargs = 1 })
+
+
+-- Function to generate the tabline
+function _G.MyTabLine()
+  local s = ''
+  
+  -- Left Side: Date and Time
+  s = s .. '%#TabLineFill#  ' .. os.date("%A %d.%m.%Y %H:%M") .. '  '
+
+  -- Spacer
+  s = s .. '%='
+
+  -- Right Side: Tabs
+  local total_tabs = vim.fn.tabpagenr('$')
+  local current_tab = vim.fn.tabpagenr()
+
+  -- Right Side: Tabs
+  local total_tabs = vim.fn.tabpagenr('$')
+  local current_tab = vim.fn.tabpagenr()
+
+  for i = 1, total_tabs do
+    local is_selected = (i == current_tab)
+    local is_next_selected = (i + 1 == current_tab)
+    
+    local hl
+    if is_selected then
+      hl = '%#TabLineSel#'
+    else
+      hl = '%#TabLine#'
+    end
+
+
+
+    -- Content
+    s = s .. hl .. ' '
+    
+    -- Get Tab Name/Info
+    local tab_title = vim.fn.gettabvar(i, 'tab_title', '')
+    local display_val = ''
+
+    if type(tab_title) == 'string' and tab_title ~= '' then
+      display_val = tab_title
+    else
+      display_val = tostring(i)
+    end
+
+    s = s .. display_val .. ' ' -- Content padding
+    
+    -- Post-separator for the current tab
+    if i < total_tabs then
+        if is_selected then
+            -- Current is Active (Blue). Next is Inactive (Gray).
+            s = s .. '%#TabLineSelSep#'
+        elseif is_next_selected then
+            -- Current is Inactive (Gray). Next is Active (Blue).
+            s = s .. '%#TabLineSepSel#'
+        else
+            -- Current Inactive, Next Inactive.
+            s = s .. '%#TabLineSep#' -- Soft separator
+        end
+    end
+  end
+  
+  s = s .. '%#TabLineFill#'
+  return s
+end
+
+-- Set the tabline to use the function
+vim.o.tabline = '%!v:lua.MyTabLine()'
+
 
 --
 -- Keybinds
@@ -190,93 +307,8 @@ vim.api.nvim_set_keymap( "n", "tp", ":tabprevious<CR>", { silent = true })
 vim.api.nvim_set_keymap( "n", "tl", ":tablast<CR>", { silent = true })
 vim.api.nvim_set_keymap( "n", "tf", ":tabfirst<CR>", { silent = true })
 vim.api.nvim_set_keymap( "n", "tt", ":tabnew<CR>", { silent = true })
+vim.api.nvim_set_keymap( "n", "tr", ":TabRename ", {})
 
 -- Coq
 vim.api.nvim_set_keymap( "i", "<C-h>", "<Plug>(coc-snippets-select)", {})
 vim.api.nvim_set_keymap( "i", "<C-l>", "g:coc_snippet_prev", {})
-
--- Tabline tabname session save extention
-local tab_names = {} -- Your custom mapping logic here
-
-local tabline = require("tabline")
-
-local function get_tab_names()
-  local tab_data = tabline.tabline_tabs()   -- list of tab tables
-  local tab_names = {}
-  for _, tab in ipairs(tab_data) do
-    if tab.name and tab.name ~= "" then
-      tab_names[tab.number] = tab.name
-    end
-  end
-  return tab_names
-end
-
-local tabname_extension = {
-  on_save = function()
-    local names = get_tab_names()
-    print("Saving Tab Names: " .. vim.inspect(names))
-    return names
-  end,
-
-  on_pre_load = function(tab_names)
-    if tab_names then
-      for tabnr, name in pairs(tab_names) do
-        tabline.tab_rename(tabnr, name)
-      end
-      vim.cmd('redrawtabline')
-      print("Restored Tab Names: " .. vim.inspect(tab_names))
-    end
-  end,
-}
-
--- Misc
-local resession = require("resession")
-resession.setup({
-  extensions = {
-    my_tabline = my_extension
-  },
-  autosave = {
-    enabled = true,
-    interval = 60,
-    notify = true,
-  },
-})
-
--- User commands
-vim.api.nvim_create_user_command("LoadSession", function(opts)
-  resession.load(opts.args)
-end, {
-  nargs = 1,
-  complete = function(ArgLead, CmdLine, CursorPos)
-    return resession.list()
-  end
-})
-
-vim.api.nvim_create_user_command("SaveSession", function(opts)
-  resession.save(opts.args)
-end, {
-  nargs = 1,
-  complete = function(ArgLead, CmdLine, CursorPos)
-    return resession.list()
-  end
-})
-
--- Autosave 'last' and 'base' sessions on exit
-vim.api.nvim_create_autocmd("VimLeavePre", {
-  callback = function()
-    resession.save("last")
-    resession.save("base")
-  end,
-})
-
--- Keymaps
-vim.keymap.set("n", "<leader>ss", resession.save)
-vim.keymap.set("n", "<leader>sl", resession.load)
-vim.keymap.set("n", "<leader>sd", resession.delete)
-
-local uv = vim.loop
-local resession = require("resession")
-local timer = uv.new_timer()
-timer:start(30000, 30000, vim.schedule_wrap(function()
-  resession.save_all({ notify = true })
-end))

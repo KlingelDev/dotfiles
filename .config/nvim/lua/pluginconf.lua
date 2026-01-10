@@ -1,3 +1,4 @@
+
 -- Conf Plugins
 
 require('lualine').setup {
@@ -15,7 +16,6 @@ require('lualine').setup {
     globalstatus = false,
     refresh = {
       statusline = 1000,
-      tabline = 1000,
       winbar = 1000,
     }
   },
@@ -34,16 +34,17 @@ require('lualine').setup {
     lualine_y = {},
     lualine_z = {}
   },
-  tabline = {
-    lualine_a = { {'datetime', style = '%Y-%m-%d %H:%M' } },
-    lualine_b = {},
-    lualine_c = {{'filename', path = 3, shorting_target = 0, file_status = false}},
-    lualine_x = { require'tabline'.tabline_tabs },
-    lualine_y = {},
-    lualine_z = {}
-  },
+
   winbar = {},
   inactive_winbar = {},
+  -- tabline = {
+  --   lualine_a = {},
+  --   lualine_b = {},
+  --   lualine_c = { "buffers" },
+  --   lualine_x = {},
+  --   lualine_y = {},
+  --   lualine_z = { "tabs" }
+  -- },
   extensions = {}
 }
 
@@ -93,32 +94,6 @@ require('telescope').setup{
   }
 }
 
-require('tabline').setup {
-    -- Defaults configuration options
-    enable = true,
-    options = {
-        -- If lualine is installed tabline will use separators configured in lualine by default.
-        -- These options can be used to override those settings.
-        section_separators = {'', ''},
-        component_separators = {'', ''},
-        max_bufferline_percent = 66, -- set to nil by default, and it uses vim.o.columns * 2/3
-        show_tabs_always = false, -- this shows tabs only when there are more than one tab or if the first tab is named
-        show_devicons = true, -- this shows devicons in buffer section
-        show_bufnr = false, -- this appends [bufnr] to buffer section,
-        show_filename_only = false, -- shows base filename only instead of relative path in filename
-        modified_icon = "+ ", -- change the default modified icon
-        modified_italic = false, -- set to true by default; this determines whether the filename turns italic if modified
-        show_tabs_only = false, -- this shows only tabs instead of tabs + buffers
-    }
-}
-require('aerial').setup({
-  -- optionally use on_attach to set keymaps when aerial has attached to a buffer
-  on_attach = function(bufnr)
-    -- Jump forwards/backwards with '{' and '}'
-    vim.keymap.set('n', '{', '<cmd>AerialPrev<CR>', {buffer = bufnr})
-    vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', {buffer = bufnr})
-  end
-})
 require('Comment').setup()
 
 require('nvim-treesitter').setup {
@@ -520,3 +495,34 @@ require("aerial").setup({
     update_delay = 300,
   },
 })
+
+-- Resession Configuration
+local ok, resession = pcall(require, 'resession')
+if ok then
+  resession.setup({
+    extensions = {
+      tab_titles = {
+        enable = true,
+      }
+    }
+  })
+
+  -- Auto-save session every 5 minutes
+  local save_timer = vim.loop.new_timer()
+  save_timer:start(300000, 300000, vim.schedule_wrap(function()
+    resession.save_all()
+    vim.notify("Session auto-saved", vim.log.levels.INFO)
+  end))
+
+  -- Auto-save on exit
+  vim.api.nvim_create_autocmd("VimLeavePre", {
+    callback = function()
+      if resession.get_current() then
+        resession.save_all()
+        vim.notify("Session auto-saved on exit", vim.log.levels.INFO)
+      end
+    end,
+  })
+else
+  vim.notify("Resession not found, skipping auto-save setup", vim.log.levels.WARN)
+end
