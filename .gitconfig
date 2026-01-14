@@ -12,11 +12,13 @@ defaultBranch = master
 [safe]
   directory = /home/karl/shares/company/IT/Playbooks
 [user]
-  email = khruskowski@gmail.com
-  name = Karl-Heinz Ruskowski
-  signingKey = FB8DA3BF
+  email = karl.ruskowski@optris.de
+  name = Karl Ruskowski
+  signingKey = 020EEF2DADD14F7D6D643E5970540795A15C714A
 [core]
   editor = nvim
   pager = less -FRX
 [commit]
 	gpgsign = true
+[url "git@github.com:Optris/otc.sdk-rust.git"]
+	insteadOf = https://github.com/Optris/otc.sdk-rust

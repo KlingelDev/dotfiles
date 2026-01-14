@@ -48,7 +48,7 @@ export GTK_THEME=Breeze:dark
 export QT_QPA_PLATFORMTHEME="qt5ct"
 export XCURSOR_SIZE=23
 
-export PATH=$PATH:/usr/bin:~/.cargo/bin:~/.npm-global/bin:~/.local/bin
+export PATH=$PATH:/usr/bin:~/.cargo/bin:~/.npm-global/bin:~/.local/bin:~/.venv/bin
 
 bindkey '^[OA' up-line-or-history
 bindkey '^[OB' down-line-or-history
@@ -74,13 +74,21 @@ alias agwork2="antigravity --user-data-dir /home/karl/.agprofiles/work2 --extens
 
 ASYNCAPI_AC_ZSH_SETUP_PATH=/home/karl/.cache/@asyncapi/cli/autocomplete/zsh_setup && test -f $ASYNCAPI_AC_ZSH_SETUP_PATH && source $ASYNCAPI_AC_ZSH_SETUP_PATH; # asyncapi autocomplete setup
 # Work Identity: Enterprise pixconnect (Uses Vertex AI pool)
-alias gwork2='HOME=$HOME/.gemini-work2 \
+alias gwork1='HOME=$HOME/.gemini-work1 \
 GOOGLE_CLOUD_PROJECT="pixconnect" \
-GOOGLE_CLOUD_LOCATION="us-central1" \
 GOOGLE_GENAI_USE_VERTEXAI=true \
+GOOGLE_CLOUD_LOCATION=us-east1 \
+GOOGLE_APPLICATION_CREDENTIALS="$HOME/.config/gcloud/application_default_credentials.json" \
+GOOGLE_API_ENDPOINT="aiplatform.googleapis.com" \
 gemini'
 
-alias gwork1='HOME=$HOME/.gemini-work1 gemini'
+alias gwork2='HOME=$HOME/.gemini-work2 gemini'
 alias gwork3='HOME=$HOME/.gemini-work3 gemini'
 alias gwork4='HOME=$HOME/.gemini-work4 gemini'
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/karl/opt/google-cloud-sdk/path.zsh.inc' ]; then . '/home/karl/opt/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/karl/opt/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/karl/opt/google-cloud-sdk/completion.zsh.inc'; fi
