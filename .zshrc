@@ -74,12 +74,12 @@ alias agwork2="antigravity --user-data-dir /home/karl/.agprofiles/work2 --extens
 
 ASYNCAPI_AC_ZSH_SETUP_PATH=/home/karl/.cache/@asyncapi/cli/autocomplete/zsh_setup && test -f $ASYNCAPI_AC_ZSH_SETUP_PATH && source $ASYNCAPI_AC_ZSH_SETUP_PATH; # asyncapi autocomplete setup
 # Work Identity: Enterprise pixconnect (Uses Vertex AI pool)
-alias gwork1='HOME=$HOME/.gemini-work1 \
-GOOGLE_CLOUD_PROJECT="pixconnect" \
-GOOGLE_GENAI_USE_VERTEXAI=true \
-GOOGLE_CLOUD_LOCATION=us-east1 \
-GOOGLE_APPLICATION_CREDENTIALS="$HOME/.config/gcloud/application_default_credentials.json" \
-GOOGLE_API_ENDPOINT="aiplatform.googleapis.com" \
+alias gwork1='unset GOOGLE_API_KEY GEMINI_API_KEY; \
+export GEMINI_CONFIG_DIR="/home/karl/.gemini-work1"; \
+export GOOGLE_CLOUD_PROJECT="pixconnect"; \
+export GOOGLE_GENAI_USE_VERTEXAI=true; \
+export GOOGLE_CLOUD_LOCATION=global; \
+export GOOGLE_APPLICATION_CREDENTIALS="/home/karl/.config/gcloud/application_default_credentials.json"; \
 gemini'
 
 alias gwork2='HOME=$HOME/.gemini-work2 gemini'
