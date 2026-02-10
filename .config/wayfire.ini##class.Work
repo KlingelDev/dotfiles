@@ -21,10 +21,12 @@ zoom_enabled_for = none
 
 [autostart]
 autostart0 = kitty --class KitCmd --session ~/.config/kitty/main_terminal.session
-autostart1 = /usr/local/bin/chrome
-autostart3 = kitty --class KitClock --session ~/.config/kitty/clock_cal.session
-autostart4 = kitty --class KitNvim --directory ~/dev/ nvim -c "cd /home/karl/dev | LoadSession dev"
-autostart5 = kitty --class KitTest --session ~/.config/kitty/tests.session
+autostart1 = /usr/bin/firefox-esr
+autostart4 = kitty --class KitNvim --directory ~/dev/ nvim -c "cd /home/karl/dev | SessionLoad dev"
+autostart5 = kitty --class KitClaude1
+autostart6 = kitty --class KitClaude2
+autostart7 = kitty --class KitGWork1
+autostart8 = kitty --class KitClock tclock clock --no-seconds
 autostart_wf_shell = true
 
 [blur]
@@ -358,13 +360,13 @@ toggle_menu = <super>
 
 [window-rules]
 rule_1 = on created if app_id is "KitTest" then start_on_output "DP-4"
-rule_10 = on created if title is "psychotropic_bar_cal" then set always_on_top
-rule_11 = on created if title is "psychotropic_bar_cal" then move 2105 70
-rule_12 = on created if title is "psychotropic_bar_cal" then start_on_output "DP-2"
-rule_4 = on created if app_id is "KitNvim" then start_on_output "DP-1"
-rule_5 = on created if app_id is "KitClock" then start_on_output "DP-4"
-rule_8 = on created if title contains "chromium" then start_on_output "DP-2"
-rule_9 = on created if title is "psychotropic_bar_cal" then assign_workspace 0 0
+rule_2 = on created if app_id is "KitCmd" then start_on_output "DP-1"
+rule_3 = on created if app_id is "firefox-esr" then start_on_output "DP-1"
+rule_4 = on created if app_id is "KitNvim" then start_on_output "DP-3"
+rule_5 = on created if app_id is "KitClock" then start_on_output "DP-1"
+rule_6 = on created if app_id is "KitClaude1" then start_on_output "DP-4"
+rule_7 = on created if app_id is "KitGWork1" then start_on_output "DP-4"
+rule_8 = on created if app_id is "KitClaude2" then start_on_output "DP-3"
 
 [wm-actions]
 minimize = none

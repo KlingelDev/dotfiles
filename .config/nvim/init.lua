@@ -55,6 +55,13 @@ require("psychotropic").setup({
   },
 })
 
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "wgsl", "python", "cpp", "lua", "vim", "javascript" }, -- Add wgsl here
+  highlight = {
+    enable = true,
+  },
+}
+
 vim.cmd("colorscheme psychotropic")
 
 -- Custom Tabline Highlights

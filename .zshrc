@@ -79,10 +79,17 @@ export GEMINI_CONFIG_DIR="/home/karl/.gemini-work1"; \
 export GOOGLE_CLOUD_PROJECT="pixconnect"; \
 export GOOGLE_GENAI_USE_VERTEXAI=true; \
 export GOOGLE_CLOUD_LOCATION=global; \
-export GOOGLE_APPLICATION_CREDENTIALS="/home/karl/.config/gcloud/application_default_credentials.json"; \
+export GOOGLE_APPLICATION_CREDENTIALS="/home/karl/.karl-codeassist01.json"; \
 gemini'
 
-alias gwork2='HOME=$HOME/.gemini-work2 gemini'
+alias gwork2='unset GOOGLE_API_KEY GEMINI_API_KEY; \
+export GEMINI_CONFIG_DIR="/home/karl/.gemini-work2"; \
+export GOOGLE_CLOUD_PROJECT="pixconnect"; \
+export GOOGLE_GENAI_USE_VERTEXAI=true; \
+export GOOGLE_CLOUD_LOCATION=global; \
+export GOOGLE_APPLICATION_CREDENTIALS="/home/karl/.karl-codeassist01.json"; \
+gemini'
+
 alias gwork3='HOME=$HOME/.gemini-work3 gemini'
 alias gwork4='HOME=$HOME/.gemini-work4 gemini'
 

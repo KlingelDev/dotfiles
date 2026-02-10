@@ -11,6 +11,7 @@ defaultBranch = master
   path = .gitconfig-personal
 [safe]
   directory = /home/karl/shares/company/IT/Playbooks
+	directory = /home/karl/m/U1win/otc.sdk-gpu
 [user]
   email = karl.ruskowski@optris.de
   name = Karl Ruskowski
